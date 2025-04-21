@@ -1,0 +1,54 @@
+### register
+# sapce is must after content type!!
+
+POST http://127.0.0.1:8000/api/verifyUser/ 
+Content-Type: application/json
+
+{
+   "regno": 25352001, 
+   "studentname": "",
+   "batchid": 2102224,
+   "mobile": 7352674281,
+   "instmail":"22352001@pondiuni.ac.in",
+   "personalmail": "abdul6682aziz@gmail.com"
+}
+
+### get 
+GET http://127.0.0.1:8000/api/verifyUser/
+Content-Type: application/json
+
+{
+    "reg": 22352001,
+}
+
+### post mail addr for verification
+POST  http://127.0.0.1:8000/api/emailv/
+Content-Type: application/json
+
+{
+    "email": "aanishaalmaaz03@proton.me"
+}
+
+### post mail addr for verification
+POST  http://127.0.0.1:8000/api/emailv/
+Content-Type: application/json
+
+{
+    "email": "20384101@pondiuni.ac.in"
+}
+
+### otp verification
+POST  http://127.0.0.1:8000/api/otpv/aanishaalmaaz03@proton.me/
+Content-Type: application/json
+
+{
+    "otp": "39a12a"
+}
+
+### resend otp verification
+POST  http://127.0.0.1:8000/api/resend/
+Content-Type: application/json
+
+{
+    "email": "anishaalmaaz03@proton.me"
+}
