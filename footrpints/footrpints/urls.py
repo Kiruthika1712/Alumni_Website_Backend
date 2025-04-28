@@ -34,6 +34,9 @@ urlpatterns = [
     path('api/blogs', views.blogs),
     path('api/mentors', views.mentor),
     path('api/mentees/<int:id>', views.mentee),
-    path('api/gallery', views.gallery)
+    path('api/gallery', views.gallery),
+    path('api/non-monetary-contribution/', views.non_monetary_contribution, name='non-monetary-contribution'),
+    path('api/lor/', views.letter_of_recommendation, name='letter_of_recommendation'),
+    path('api/class-note/', views.class_note, name='class_note'),
 ]
 

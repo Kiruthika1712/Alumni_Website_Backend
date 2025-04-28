@@ -175,7 +175,7 @@ class Mentor (models.Model):
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     approved_by = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="approved_by")
-
+    
     class Meta:
         db_table = 'mentor'
 
@@ -198,3 +198,72 @@ class Gallery (models.Model):
 
     class Meta:
         db_table = 'gallery'
+
+class NonMonetaryContribution(models.Model):
+    full_name = models.CharField(max_length=255)
+    session_date = models.DateField()
+    session_time = models.TimeField()
+    session_topic = models.CharField(max_length=500)
+
+    class Meta:
+        db_table = 'contributions'
+
+class LetterOfRecommendation(models.Model):
+    ROLE_CHOICES = [
+        ('student', 'Student'),
+        ('alumni', 'Alumni'),
+        ('staff', 'Staff')
+    ]
+    
+    TEMPLATE_CHOICES = [
+        ('academic', 'Academic'),
+        ('job', 'Job'),
+        ('general', 'General')
+    ]
+    
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+    template = models.CharField(max_length=10, choices=TEMPLATE_CHOICES)
+    name = models.CharField(max_length=255)
+    recommender_name = models.CharField(max_length=255)
+    recommender_title = models.CharField(max_length=255)
+    academic_performance = models.TextField(blank=True, null=True)
+    work_experience = models.TextField(blank=True, null=True)
+    skills = models.TextField(blank=True, null=True)
+    projects = models.TextField(blank=True, null=True)
+    areas_of_contribution = models.TextField(blank=True, null=True)
+    achievements = models.TextField(blank=True, null=True)
+    purpose = models.TextField(blank=True, null=True)
+    date_submitted = models.DateTimeField(auto_now_add=True)
+    user_id = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="letters_of_recommendation", null=True, default=None) 
+
+    class Meta:
+        db_table = 'lor'
+
+class ClassNote(models.Model):
+    PENDING = 'Pending'
+    APPROVED_BLOG = 'Approved for Blog'
+    APPROVED_NEWS = 'Approved for News'
+
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (APPROVED_BLOG, 'Approved for Blog'),
+        (APPROVED_NEWS, 'Approved for News'),
+    ]
+
+    PROFESSIONAL = 'Professional'
+    PERSONAL = 'Personal'
+
+    CATEGORY_CHOICES = [
+        (PROFESSIONAL, 'Professional'),
+        (PERSONAL, 'Personal'),
+    ]
+
+    title = models.CharField(max_length=255)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    description = models.TextField()
+    attachment = models.FileField(upload_to='uploads/', null=True, blank=True)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='class_notes')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
+
+    class Meta:
+        db_table = 'classnote'

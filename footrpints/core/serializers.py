@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import OfficialAlumni, EventCategories, Events, NewsCategories, News, Blogs, Mentor, Mentee, Gallery
+from .models import OfficialAlumni, EventCategories, Events, NewsCategories, News, Blogs, Mentor, Mentee, Gallery, NonMonetaryContribution, LetterOfRecommendation, ClassNote
 
 
 class AlumniSerializer(serializers.ModelSerializer):
@@ -14,8 +14,7 @@ class AlumniSerializer(serializers.ModelSerializer):
 class EventCategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventCategories
-        # fields =['regno','studentname','mobile','batchid']
-        fields = "__all__"  # to get all fields from the model
+        fields = "__all__" 
 
 
 class EventsSerializer(serializers.ModelSerializer):
@@ -37,14 +36,37 @@ class NewsSerializer(serializers.ModelSerializer):
 
 
 class BlogsSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='author.username', read_only=True)
+
     class Meta:
         model = Blogs
-        fields = "__all__"
+        fields = ['id', 'title', 'description', 'content', 'image_url', 'created_at', 'author', 'username']
 
+
+    class Meta:
+        model = Blogs
+        fields = ['id', 'title', 'description', 'content', 'image_url', 'created_at', 'author', 'username']
 class MentorSerializer(serializers.ModelSerializer):
+    mentor_user_name = serializers.CharField(source='user_id.username', read_only=True)
+    approver_name = serializers.CharField(source='approved_by.username', read_only=True)
+
     class Meta:
         model = Mentor
-        fields = "__all__"
+        fields = [
+            'id', 
+            'industry', 
+            'role', 
+            'company', 
+            'guidance_areas', 
+            'contact_method', 
+            'availability', 
+            'linkedin', 
+            'is_verified', 
+            'created_at', 
+            'mentor_user_name', 
+            'approver_name'
+        ]
+
 
 class MentorPostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,3 +83,24 @@ class GallerySerializer(serializers.ModelSerializer):
         model = Gallery
         fields = "__all__"
         
+class NonMonetaryContributionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NonMonetaryContribution
+        fields = '__all__'
+
+class LetterOfRecommendationSerializer(serializers.ModelSerializer):
+    date_submitted = serializers.ReadOnlyField()
+
+    class Meta:
+        model = LetterOfRecommendation
+        fields = ['id', 'role', 'template', 'name', 'recommender_name', 'recommender_title', 
+                  'academic_performance', 'work_experience', 'skills', 'projects', 
+                  'areas_of_contribution', 'achievements', 'purpose', 'date_submitted', 'user_id']
+class ClassNoteSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.username', read_only=True)  # Show username of the related user
+    alumni_id = serializers.CharField(source='user.alumni_id', read_only=True)  # Show alumni_id of the related user
+    email = serializers.EmailField(source='user.email', read_only=True)  # Show email of the related user
+
+    class Meta:
+        model = ClassNote
+        fields = ['id', 'title', 'category', 'description', 'attachment', 'user_name', 'alumni_id', 'email', 'status']
